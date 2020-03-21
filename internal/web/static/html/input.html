@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>hclfmt</title>
+    <link rel="stylesheet" href="static/css/input.css">
+</head>
+<body>
+    <div class="content">
+        <h2 class="mono">$ hclfmt</h2>
+        <form action="/" method="POST" id="fmtform" name="fmtform">
+            <textarea
+                    autofocus="true"
+                    cols="64"
+                    placeholder="HCL syntax"
+                    required="true"
+                    rows="32"
+                    wrap="soft"
+                    name="fmttext"
+                    form="fmtform"
+            ></textarea>
+            <br/><br/>
+            <input type="submit" form="fmtform" value="fmtform" class="mono"/>
+        </form>
+    </div>
+</body>
+</html>
