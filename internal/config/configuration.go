@@ -20,7 +20,6 @@ const (
 type Configuration struct {
 	BindAddress   string        `hcl:"bind_address"`
 	Port          int           `hcl:"port"`
-	PathPrefix    string        `hcl:"path_prefix"`
 	ReadTimeout   time.Duration `hcl:"read_timeout"`
 	WriteTimeout  time.Duration `hcl:"write_timeout"`
 	MaxRequestLen int64         `hcl:"max_request_length"`
@@ -51,7 +50,7 @@ func (c Configuration) Server(mux http.Handler) (*http.Server, error) {
 
 	server := &http.Server{
 		Addr:         c.Address(),
-		Handler:      http.StripPrefix(c.PathPrefix, mux),
+		Handler:      mux,
 		ReadTimeout:  readTimeout,
 		WriteTimeout: writeTimeout,
 	}

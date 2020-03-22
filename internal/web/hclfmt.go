@@ -12,13 +12,12 @@ import (
 )
 
 type hclFmt struct {
-	log    loggy.Logger
-	tool   *format.Tool
-	prefix string
-	html   *template.Template
+	log  loggy.Logger
+	tool *format.Tool
+	html *template.Template
 }
 
-func newHCLFmt(prefix string, tool *format.Tool) http.Handler {
+func newHCLFmt(tool *format.Tool) http.Handler {
 	return &hclFmt{
 		log:  loggy.New("format"),
 		tool: tool,
@@ -40,10 +39,15 @@ func (h *hclFmt) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (h *hclFmt) get(w http.ResponseWriter, r *http.Request) {
 	h.log.Tracef("GET %q from %s", r.URL.Path, r.RemoteAddr)
 	w.Header().Set("Content-Type", "text/html")
-	if err := h.html.Execute(w, struct{ Prefix string }{Prefix: h.prefix}); err != nil {
+	if err := h.html.Execute(w, nil); err != nil {
 		h.log.Errorf("failed to render html: %v", err)
 		return
 	}
+}
+
+type page struct {
+	Path    string
+	Statics string
 }
 
 func (h *hclFmt) post(w http.ResponseWriter, r *http.Request) {

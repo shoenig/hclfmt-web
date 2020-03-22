@@ -17,7 +17,7 @@ func initWeb(fs *FmtService) error {
 	fs.log.Tracef("setting up web server @ %s", fs.config.Address())
 
 	router := mux.NewRouter()
-	web.Set(fs.config.PathPrefix, router, fs.tool)
+	web.Set(router, fs.tool)
 
 	server, err := fs.config.Server(router)
 	if err != nil {
