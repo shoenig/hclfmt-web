@@ -29,6 +29,20 @@ TODO
 
 See [example.hcl](hack/example.json) for an example configuration file.
 
+### Caddy
+
+Setup a path matching proxy
+
+```
+sethops1.net/hclfmt {
+  proxy   /	localhost:9800
+  gzip
+  log     stdout
+  errors  stderr
+  ratelimit * / 3 20 second
+}
+```
+
 # Contributing
 
 The `gophers.dev/cmds/hclfmt-web` module is always improving with new features
