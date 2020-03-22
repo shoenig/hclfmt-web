@@ -20,5 +20,6 @@ func Set(router *mux.Router, tool *format.Tool) {
 	// statics
 	router.Handle("/static/css/{file}", http.StripPrefix("/static/", statics))
 
-	router.Handle("/", newHCLFmt(tool)).Methods(http.MethodGet, http.MethodPost)
+	router.Handle("/hclfmt", newHCLFmt(tool)).Methods(http.MethodGet, http.MethodPost)
+	router.Handle("/", http.RedirectHandler("/hclfmt", http.StatusPermanentRedirect))
 }
