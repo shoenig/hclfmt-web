@@ -1,6 +1,6 @@
 localhost:8000 {
 	proxy /hclfmt localhost:9800
-	root /tmp/foo
+	# root /other/static/content
 	gzip
 	log	stdout
 	errors	stderr
