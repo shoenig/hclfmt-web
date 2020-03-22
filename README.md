@@ -23,25 +23,13 @@ $ go get gophers.dev/cmds/hclfmt-web
 
 # Example Usage
 
-TODO
+```bash
+$ hclfmt-web -config hack/example.hcl
+```
 
 # Configuration
 
-See [example.hcl](hack/example.json) for an example configuration file.
-
-### Caddy
-
-Setup a path matching proxy
-
-```
-sethops1.net/hclfmt {
-  proxy   /	localhost:9800
-  gzip
-  log     stdout
-  errors  stderr
-  ratelimit * / 3 20 second
-}
-```
+See [example.hcl](hack/example.hcl) for an example configuration file.
 
 # Contributing
 
