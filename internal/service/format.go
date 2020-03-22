@@ -15,7 +15,7 @@ type FmtService struct {
 func NewFmtService(config config.Configuration) (*FmtService, error) {
 	return initialize(&FmtService{
 		config: config,
-		tool:   format.NewTool(config.WebServer.MaxRequestLen),
+		tool:   format.NewTool(config.MaxRequestLen),
 		log:    loggy.New("fmt-service"),
 	})
 }

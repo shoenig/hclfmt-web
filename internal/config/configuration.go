@@ -18,10 +18,6 @@ const (
 )
 
 type Configuration struct {
-	WebServer WebServer `hcl:"web_server"`
-}
-
-type WebServer struct {
 	BindAddress   string        `hcl:"bind_address"`
 	Port          int           `hcl:"port"`
 	ReadTimeout   time.Duration `hcl:"read_timeout"`
@@ -29,31 +25,31 @@ type WebServer struct {
 	MaxRequestLen int64         `hcl:"max_request_length"`
 }
 
-func (ws WebServer) Address() string {
-	return fmt.Sprintf("%s:%d", ws.BindAddress, ws.Port)
+func (c Configuration) Address() string {
+	return fmt.Sprintf("%s:%d", c.BindAddress, c.Port)
 }
 
-func (ws WebServer) Server(mux http.Handler) (*http.Server, error) {
-	if ws.BindAddress == "" {
+func (c Configuration) Server(mux http.Handler) (*http.Server, error) {
+	if c.BindAddress == "" {
 		return nil, ErrNoBindAddress
 	}
 
-	if ws.Port <= 1024 {
+	if c.Port <= 1024 {
 		return nil, ErrPortRange
 	}
 
-	readTimeout := ws.ReadTimeout
+	readTimeout := c.ReadTimeout
 	if readTimeout <= 0 {
 		readTimeout = defaultReadTimeout
 	}
 
-	writeTimeout := ws.WriteTimeout
+	writeTimeout := c.WriteTimeout
 	if writeTimeout <= 0 {
 		writeTimeout = defaultWriteTimeout
 	}
 
 	server := &http.Server{
-		Addr:         ws.Address(),
+		Addr:         c.Address(),
 		Handler:      mux,
 		ReadTimeout:  readTimeout,
 		WriteTimeout: writeTimeout,

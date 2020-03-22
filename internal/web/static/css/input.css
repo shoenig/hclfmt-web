@@ -1,6 +1,20 @@
 .content {
     padding-top: .2em;
     padding-left: 2.5em;
+    padding-bottom: 2em;
+}
+
+.footer {
+    padding-left: 2.25em;
+    font-family: monospace;
+}
+
+.footer a:link {
+    color: black;
+}
+
+.footer a:visited {
+    color: black;
 }
 
 .mono {

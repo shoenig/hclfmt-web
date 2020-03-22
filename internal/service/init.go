@@ -6,20 +6,20 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
-	"gophers.dev/cmds/hclfmt-web/internal/web"
 
+	"gophers.dev/cmds/hclfmt-web/internal/web"
 	"gophers.dev/pkgs/loggy"
 )
 
 type initer func(*FmtService) error
 
 func initWeb(fs *FmtService) error {
-	fs.log.Tracef("setting up web server @ %s", fs.config.WebServer.Address())
+	fs.log.Tracef("setting up web server @ %s", fs.config.Address())
 
 	router := mux.NewRouter()
 	web.Set(router, fs.tool)
 
-	server, err := fs.config.WebServer.Server(router)
+	server, err := fs.config.Server(router)
 	if err != nil {
 		return errors.Wrap(err, "unable to create web server")
 	}

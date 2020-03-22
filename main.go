@@ -12,15 +12,19 @@ import (
 //go:generate go run gophers.dev/cmds/petrify/v5/cmd/petrify -prefix internal/web/ -o internal/web/static/generated.go -pkg static internal/web/static/...
 
 func main() {
-	fs, err := service.NewFmtService(config.Configuration{
-		WebServer: config.WebServer{
-			BindAddress: "0.0.0.0",
-			Port:        9800,
-		},
-	})
+	log := loggy.New("main")
+
+	configuration, err := config.Load()
 	if err != nil {
-		loggy.New("main").Errorf("unable to launch: %v", err)
+		log.Errorf("unable to load config: %v", err)
 		os.Exit(1)
 	}
+
+	fs, err := service.NewFmtService(configuration)
+	if err != nil {
+		log.Errorf("unable to launch: %v", err)
+		os.Exit(1)
+	}
+
 	fs.Start()
 }
