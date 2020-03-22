@@ -64,20 +64,23 @@ func (h *hclFmt) post(w http.ResponseWriter, r *http.Request) {
 		strings.NewReader(r.PostForm.Get("fmttext")),
 	)
 
-	result, err := h.tool.Process(rc)
+	body, err := h.tool.Process(rc)
 	if err != nil {
 		h.log.Errorf("failed to process body: %v", err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
 	w.WriteHeader(http.StatusOK)
-	response := response(result)
-	_, _ = w.Write([]byte(response))
+
+	markdown := r.PostForm.Get("mdown")
+	_, _ = w.Write([]byte(response(markdown, body)))
+
 }
 
-func response(result *format.Result) string {
+func response(markdown string, result *format.Result) string {
 	if result.Diagnostics.Problematic {
 		return result.Diagnostics.Body
 	}
-	return result.Fmt
+	return format.Markdown(markdown, result.Fmt)
 }
