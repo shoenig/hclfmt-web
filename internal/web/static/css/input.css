@@ -17,6 +17,17 @@
     color: black;
 }
 
+.md-head {
+    font-family: monospace;
+    font-weight: bold;
+    font-size: large;
+}
+
+.md-opt {
+    font-family: monospace;
+    font-size: large;
+}
+
 .mono {
     font-family: monospace;
 }
