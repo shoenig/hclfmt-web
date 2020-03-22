@@ -1,7 +1,9 @@
 hclfmt-web
 ==========
 
-A simple `hclfmt`-as-a-service doodad
+The `hclfmt` command as a service.
+
+[Online](https://sethops1.net/hclfmt)
 
 [![Go Report Card](https://goreportcard.com/badge/gophers.dev/cmds/hclfmt-web)](https://goreportcard.com/report/gophers.dev/cmds/hclfmt-web)
 [![Build Status](https://travis-ci.com/shoenig/hclfmt-web.svg?branch=master)](https://travis-ci.com/shoenig/hclfmt-web)
@@ -11,7 +13,7 @@ A simple `hclfmt`-as-a-service doodad
 
 # Project Overview
 
-Module `gophers.dev/cmds/hclfmt-web` provides an an API/webserver for applying
+Module `gophers.dev/cmds/hclfmt-web` provides a web server for applying
 the `hclfmt` command on input and returning the results.
 
 # Getting Started
