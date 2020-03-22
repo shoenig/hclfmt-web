@@ -9,7 +9,7 @@ import (
 	petrify "gophers.dev/cmds/petrify/v5"
 )
 
-func Set(router *mux.Router, tool *format.Tool) {
+func Set(prefix string, router *mux.Router, tool *format.Tool) {
 	statics := http.FileServer(&petrify.AssetFS{
 		Asset:     static.Asset,
 		AssetDir:  static.AssetDir,
@@ -21,5 +21,5 @@ func Set(router *mux.Router, tool *format.Tool) {
 	router.Handle("/static/css/{file}", http.StripPrefix("/static/", statics))
 
 	// api service
-	router.Handle("/", newHCLFmt(tool)).Methods(http.MethodGet, http.MethodPost)
+	router.Handle("/", newHCLFmt(prefix, tool)).Methods(http.MethodGet, http.MethodPost)
 }
