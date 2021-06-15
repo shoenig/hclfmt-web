@@ -2,33 +2,34 @@ package service
 
 import (
 	"net/http"
-	"os"
 
 	"github.com/gorilla/mux"
-	"github.com/pkg/errors"
 
 	"gophers.dev/cmds/hclfmt-web/internal/web"
-	"gophers.dev/pkgs/loggy"
 )
 
 type initer func(*FmtService) error
 
 func initWeb(fs *FmtService) error {
-	fs.log.Tracef("setting up web server @ %s", fs.config.Address())
+	fs.log.Tracef("setting up web server @ %s/%s", fs.config.BindAddress, fs.config.Service)
 
 	router := mux.NewRouter()
 	web.Set(router, fs.tool)
 
-	server, err := fs.config.Server(router)
+	service, err := fs.config.GetService()
 	if err != nil {
-		return errors.Wrap(err, "unable to create web server")
+		return err
 	}
 
-	go func(h http.Handler) {
-		err := server.ListenAndServe()
-		loggy.New("listener").Errorf("server stopped serving: %v", err)
-		os.Exit(1)
-	}(router)
+	go func() {
+		if lErr := (&http.Server{
+			Addr:      fs.config.Address(),
+			TLSConfig: service.ServerTLSConfig(),
+			Handler:   router,
+		}).ListenAndServeTLS("", ""); lErr != nil {
+			fs.log.Errorf("failed to listen and serve Connect TLS:", lErr)
+		}
+	}()
 
 	return nil
 }

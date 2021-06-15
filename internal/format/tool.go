@@ -17,10 +17,10 @@ const (
 )
 
 type Tool struct {
-	maxRequestLen int64
+	maxRequestLen int
 }
 
-func NewTool(max int64) *Tool {
+func NewTool(max int) *Tool {
 	if max <= 0 {
 		max = defaultMaxLen
 	}
@@ -86,6 +86,6 @@ func (t *Tool) check(body []byte) (*Diagnostics, error) {
 
 func (t *Tool) read(r io.ReadCloser) ([]byte, error) {
 	defer ignore.Close(r)
-	limit := io.LimitReader(r, t.maxRequestLen)
+	limit := io.LimitReader(r, int64(t.maxRequestLen))
 	return ioutil.ReadAll(limit)
 }

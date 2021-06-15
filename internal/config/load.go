@@ -26,7 +26,8 @@ func Load() (Configuration, error) {
 		log.Infof("using default configuration")
 		return Configuration{
 			BindAddress: "0.0.0.0",
-			Port:        9800,
+			BindPort:    9100,
+			Service:     "hclfmt",
 		}, nil
 	}
 	log.Infof("loading configuration from %s", *s)

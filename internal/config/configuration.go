@@ -3,13 +3,17 @@ package config
 import (
 	"errors"
 	"fmt"
-	"net/http"
+	"log"
+	"os"
 	"time"
+
+	consulapi "github.com/hashicorp/consul/api"
+	"github.com/hashicorp/consul/connect"
 )
 
 var (
 	ErrNoBindAddress = errors.New("no bind address")
-	ErrPortRange     = errors.New("port not within range")
+	ErrNoBindPort    = errors.New("no bind port")
 )
 
 const (
@@ -18,42 +22,57 @@ const (
 )
 
 type Configuration struct {
-	BindAddress   string        `hcl:"bind_address"`
-	Port          int           `hcl:"port"`
-	ReadTimeout   time.Duration `hcl:"read_timeout"`
-	WriteTimeout  time.Duration `hcl:"write_timeout"`
-	MaxRequestLen int64         `hcl:"max_request_length"`
+	Service       string `hcl:"service"`
+	BindAddress   string `hcl:"bind_address"`
+	BindPort      int    `hcl:"bind_port"`
+	MaxRequestLen int    `hcl:"max_request_len"`
+}
+
+func logEnvironment(name string) {
+	value := os.Getenv(name)
+	if value == "" {
+		value = "<unset>"
+	}
+	log.Printf("environment %s = %s", name, value)
+}
+
+func Consul() (*consulapi.Client, error) {
+	logEnvironment("CONSUL_HTTP_ADDR")
+	logEnvironment("CONSUL_NAMESPACE")
+	logEnvironment("CONSUL_CACERT")
+	logEnvironment("CONSUL_CLIENT_CERT")
+	logEnvironment("CONSUL_CLIENT_KEY")
+	logEnvironment("CONSUL_HTTP_SSL")
+	logEnvironment("CONSUL_HTTP_SSL_VERIFY")
+	logEnvironment("CONSUL_TLS_SERVER_NAME")
+	logEnvironment("CONSUL_GRPC_ADDR")
+	logEnvironment("CONSUL_HTTP_TOKEN_FILE")
+	consulConfig := consulapi.DefaultConfig()
+	return consulapi.NewClient(consulConfig)
 }
 
 func (c Configuration) Address() string {
-	return fmt.Sprintf("%s:%d", c.BindAddress, c.Port)
+	return fmt.Sprintf("%s:%d", c.BindAddress, c.BindPort)
 }
 
-func (c Configuration) Server(mux http.Handler) (*http.Server, error) {
+func (c Configuration) GetService() (*connect.Service, error) {
 	if c.BindAddress == "" {
 		return nil, ErrNoBindAddress
 	}
 
-	if c.Port <= 1024 {
-		return nil, ErrPortRange
+	if c.BindPort <= 0 {
+		return nil, ErrNoBindPort
 	}
 
-	readTimeout := c.ReadTimeout
-	if readTimeout <= 0 {
-		readTimeout = defaultReadTimeout
+	cc, err := Consul()
+	if err != nil {
+		return nil, fmt.Errorf("failed to create consul client: %w", err)
 	}
 
-	writeTimeout := c.WriteTimeout
-	if writeTimeout <= 0 {
-		writeTimeout = defaultWriteTimeout
+	cs, err := connect.NewService(c.Service, cc)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create connect service: %w", err)
 	}
 
-	server := &http.Server{
-		Addr:         c.Address(),
-		Handler:      mux,
-		ReadTimeout:  readTimeout,
-		WriteTimeout: writeTimeout,
-	}
-
-	return server, nil
+	return cs, nil
 }
