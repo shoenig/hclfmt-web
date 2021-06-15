@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"gophers.dev/cmds/hclfmt-web/internal/config"
 
 	"gophers.dev/cmds/hclfmt-web/internal/web"
 )
@@ -11,19 +12,19 @@ import (
 type initer func(*FmtService) error
 
 func initWeb(fs *FmtService) error {
-	fs.log.Tracef("setting up web server @ %s/%s", fs.config.BindAddress, fs.config.Service)
+	fs.log.Tracef("setting up web server @ %s", config.Address())
 
 	router := mux.NewRouter()
 	web.Set(router, fs.tool)
 
-	service, err := fs.config.GetService()
+	service, err := config.GetService()
 	if err != nil {
 		return err
 	}
 
 	go func() {
 		if lErr := (&http.Server{
-			Addr:      fs.config.Address(),
+			Addr:      config.Address(),
 			TLSConfig: service.ServerTLSConfig(),
 			Handler:   router,
 		}).ListenAndServeTLS("", ""); lErr != nil {

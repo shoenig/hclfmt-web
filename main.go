@@ -3,7 +3,6 @@ package main
 import (
 	"os"
 
-	"gophers.dev/cmds/hclfmt-web/internal/config"
 	"gophers.dev/cmds/hclfmt-web/internal/service"
 	"gophers.dev/pkgs/loggy"
 )
@@ -14,13 +13,7 @@ import (
 func main() {
 	log := loggy.New("main")
 
-	configuration, err := config.Load()
-	if err != nil {
-		log.Errorf("unable to load config: %v", err)
-		os.Exit(1)
-	}
-
-	fs, err := service.NewFmtService(configuration)
+	fs, err := service.NewFmtService()
 	if err != nil {
 		log.Errorf("unable to launch: %v", err)
 		os.Exit(1)

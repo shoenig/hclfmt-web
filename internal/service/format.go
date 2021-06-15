@@ -1,22 +1,23 @@
 package service
 
 import (
-	"gophers.dev/cmds/hclfmt-web/internal/config"
 	"gophers.dev/cmds/hclfmt-web/internal/format"
 	"gophers.dev/pkgs/loggy"
 )
 
+const (
+	maxReqLen = 1 * 1024 * 1024 // 1 megabyte
+)
+
 type FmtService struct {
-	tool   *format.Tool
-	config config.Configuration
-	log    loggy.Logger
+	tool *format.Tool
+	log  loggy.Logger
 }
 
-func NewFmtService(config config.Configuration) (*FmtService, error) {
+func NewFmtService() (*FmtService, error) {
 	return initialize(&FmtService{
-		config: config,
-		tool:   format.NewTool(config.MaxRequestLen),
-		log:    loggy.New("fmt-service"),
+		tool: format.NewTool(maxReqLen),
+		log:  loggy.New("hclfmt"),
 	})
 }
 
