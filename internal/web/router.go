@@ -18,11 +18,11 @@ func Set(router *mux.Router, tool *format.Tool) {
 	})
 
 	// statics
-	router.Handle("/hclfmt/static/css/{file}", http.StripPrefix("/hclfmt/static/", statics))
+	router.Handle("/static/css/{file}", http.StripPrefix("/hclfmt/static/", statics))
 
 	// health check
 	router.Handle("/health", newHealth()).Methods(http.MethodGet)
 
 	// api service
-	router.Handle("/hclfmt", newHCLFmt(tool)).Methods(http.MethodGet, http.MethodPost)
+	router.Handle("/", newHCLFmt(tool)).Methods(http.MethodGet, http.MethodPost)
 }
