@@ -20,7 +20,7 @@ the `hclfmt` command on input and returning the results.
 
 The `hclfmt-web` package can be installed by running
 ```bash
-$ go get gophers.dev/cmds/hclfmt-web
+$ go install gophers.dev/cmds/hclfmt-web@latest
 ```
 
 # Example Usage
