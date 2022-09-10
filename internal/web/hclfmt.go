@@ -1,13 +1,13 @@
 package web
 
 import (
+	"embed"
 	"html/template"
 	"io/ioutil"
 	"net/http"
 	"strings"
 
-	"gophers.dev/cmds/hclfmt-web/internal/format"
-	"gophers.dev/cmds/hclfmt-web/internal/web/static"
+	"github.com/shoenig/hclfmt-web/internal/format"
 	"gophers.dev/pkgs/loggy"
 )
 
@@ -17,13 +17,15 @@ type hclFmt struct {
 	html *template.Template
 }
 
-func newHCLFmt(tool *format.Tool) http.Handler {
+func newHCLFmt(fs embed.FS, tool *format.Tool) http.Handler {
+	html, err := template.ParseFS(fs, "static/html/*.html")
+	if err != nil {
+		panic(err)
+	}
 	return &hclFmt{
 		log:  loggy.New("format"),
 		tool: tool,
-		html: static.MustParseTemplates(
-			"static/html/input.html",
-		),
+		html: html,
 	}
 }
 
