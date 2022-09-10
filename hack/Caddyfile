@@ -1,8 +1,0 @@
-localhost:8000 {
-	proxy /hclfmt localhost:9800
-	# root /other/static/content
-	gzip
-	log	stdout
-	errors	stderr
-	ratelimit * / 3 20 second
-}

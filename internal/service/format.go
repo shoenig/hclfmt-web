@@ -1,7 +1,7 @@
 package service
 
 import (
-	"gophers.dev/cmds/hclfmt-web/internal/format"
+	"github.com/shoenig/hclfmt-web/internal/format"
 	"gophers.dev/pkgs/loggy"
 )
 
@@ -17,7 +17,7 @@ type FmtService struct {
 func NewFmtService() (*FmtService, error) {
 	return initialize(&FmtService{
 		tool: format.NewTool(maxReqLen),
-		log:  loggy.New("hclfmt"),
+		log:  loggy.New("hcl"),
 	})
 }
 
@@ -29,12 +29,5 @@ func (fs *FmtService) Start() {
 }
 
 func initialize(fs *FmtService) (*FmtService, error) {
-	for _, f := range []initer{
-		initWeb,
-	} {
-		if err := f(fs); err != nil {
-			return nil, err
-		}
-	}
-	return fs, nil
+	return fs, initWeb(fs)
 }

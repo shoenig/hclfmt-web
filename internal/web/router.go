@@ -1,28 +1,24 @@
 package web
 
 import (
+	"embed"
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"gophers.dev/cmds/hclfmt-web/internal/format"
-	"gophers.dev/cmds/hclfmt-web/internal/web/static"
-	petrify "gophers.dev/cmds/petrify/v5"
+	"github.com/shoenig/hclfmt-web/internal/format"
 )
 
-func Set(router *mux.Router, tool *format.Tool) {
-	statics := http.FileServer(&petrify.AssetFS{
-		Asset:     static.Asset,
-		AssetDir:  static.AssetDir,
-		AssetInfo: static.AssetInfo,
-		Prefix:    "static",
-	})
+//go:embed static/*
+var fs embed.FS
 
-	// statics
+func Set(router *mux.Router, tool *format.Tool) {
+	// handle statics
+	statics := http.FileServer(http.FS(fs))
 	router.Handle("/static/css/{file}", http.StripPrefix("/hclfmt/static/", statics))
 
-	// health check
+	// handle health check
 	router.Handle("/health", newHealth()).Methods(http.MethodGet)
 
-	// api service
-	router.Handle("/", newHCLFmt(tool)).Methods(http.MethodGet, http.MethodPost)
+	// handle api service
+	router.Handle("/", newHCLFmt(fs, tool)).Methods(http.MethodGet, http.MethodPost)
 }

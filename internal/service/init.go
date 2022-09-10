@@ -4,31 +4,23 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"gophers.dev/cmds/hclfmt-web/internal/config"
-
-	"gophers.dev/cmds/hclfmt-web/internal/web"
+	"github.com/shoenig/hclfmt-web/internal/config"
+	"github.com/shoenig/hclfmt-web/internal/web"
 )
 
-type initer func(*FmtService) error
-
 func initWeb(fs *FmtService) error {
-	fs.log.Tracef("setting up web server @ %s", config.Address())
+	address := config.Get()
+	fs.log.Tracef("setting up web server @ %s", address)
 
 	router := mux.NewRouter()
 	web.Set(router, fs.tool)
 
-	service, err := config.GetService()
-	if err != nil {
-		return err
-	}
-
 	go func() {
-		if lErr := (&http.Server{
-			Addr:      config.Address(),
-			TLSConfig: service.ServerTLSConfig(),
-			Handler:   router,
-		}).ListenAndServeTLS("", ""); lErr != nil {
-			fs.log.Errorf("failed to listen and serve Connect TLS:", lErr)
+		if err := (&http.Server{
+			Addr:    address,
+			Handler: router,
+		}).ListenAndServe(); err != nil {
+			fs.log.Errorf("failed to listen and serve", err)
 		}
 	}()
 
