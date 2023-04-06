@@ -1,9 +1,7 @@
 hclfmt-web
 ==========
 
-The `hclfmt` command as a service.
-
-[Online](https://sethops1.net/hclfmt)
+The `hclfmt` command as a service. Use [Online](https://sethops1.net/hclfmt).
 
 [![GitHub](https://img.shields.io/github/license/shoenig/hclfmt-web.svg)](LICENSE)
 
