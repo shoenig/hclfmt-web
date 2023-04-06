@@ -3,7 +3,7 @@ package web
 import (
 	"embed"
 	"html/template"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -47,11 +47,6 @@ func (h *hclFmt) get(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-type page struct {
-	Path    string
-	Statics string
-}
-
 func (h *hclFmt) post(w http.ResponseWriter, r *http.Request) {
 	h.log.Tracef("POST %q from %s", r.URL.Path, r.RemoteAddr)
 	w.Header().Set("Content-Type", "text/plain")
@@ -62,7 +57,7 @@ func (h *hclFmt) post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rc := ioutil.NopCloser(
+	rc := io.NopCloser(
 		strings.NewReader(r.PostForm.Get("fmttext")),
 	)
 
@@ -77,7 +72,6 @@ func (h *hclFmt) post(w http.ResponseWriter, r *http.Request) {
 
 	markdown := r.PostForm.Get("mdown")
 	_, _ = w.Write([]byte(response(markdown, body)))
-
 }
 
 func response(markdown string, result *format.Result) string {

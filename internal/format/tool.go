@@ -3,7 +3,6 @@ package format
 import (
 	"bytes"
 	"io"
-	"io/ioutil"
 
 	hcl2 "github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/hclparse"
@@ -87,5 +86,5 @@ func (t *Tool) check(body []byte) (*Diagnostics, error) {
 func (t *Tool) read(r io.ReadCloser) ([]byte, error) {
 	defer ignore.Close(r)
 	limit := io.LimitReader(r, int64(t.maxRequestLen))
-	return ioutil.ReadAll(limit)
+	return io.ReadAll(limit)
 }
