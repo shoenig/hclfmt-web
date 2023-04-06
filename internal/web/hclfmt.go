@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/shoenig/hclfmt-web/internal/format"
-	"gophers.dev/pkgs/loggy"
+	"github.com/shoenig/loggy"
 )
 
 type hclFmt struct {

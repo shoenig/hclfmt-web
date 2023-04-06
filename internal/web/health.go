@@ -4,7 +4,7 @@ import (
 	"io"
 	"net/http"
 
-	"gophers.dev/pkgs/loggy"
+	"github.com/shoenig/loggy"
 )
 
 type health struct {
