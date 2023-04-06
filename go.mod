@@ -6,7 +6,7 @@ require (
 	github.com/gorilla/mux v1.7.4
 	github.com/hashicorp/hcl/v2 v2.14.0
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.6.1
+	github.com/stretchr/testify v1.8.2
 	gophers.dev/pkgs/ignore v0.2.0
 	gophers.dev/pkgs/loggy v0.2.0
 )
@@ -20,5 +20,5 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/zclconf/go-cty v1.8.0 // indirect
 	golang.org/x/text v0.3.6 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
