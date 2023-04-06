@@ -1,14 +1,14 @@
 module github.com/shoenig/hclfmt-web
 
-go 1.19
+go 1.20
 
 require (
 	github.com/gorilla/mux v1.7.4
 	github.com/hashicorp/hcl/v2 v2.14.0
 	github.com/pkg/errors v0.9.1
+	github.com/shoenig/ignore v0.4.0
+	github.com/shoenig/loggy v0.3.2
 	github.com/stretchr/testify v1.6.1
-	gophers.dev/pkgs/ignore v0.2.0
-	gophers.dev/pkgs/loggy v0.2.0
 )
 
 require (

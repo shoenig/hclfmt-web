@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/shoenig/hclfmt-web/internal/service"
-	"gophers.dev/pkgs/loggy"
+	"github.com/shoenig/loggy"
 )
 
 func main() {

@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/hcl/v2/hclparse"
 	"github.com/hashicorp/hcl/v2/hclwrite"
 	"github.com/pkg/errors"
-	"gophers.dev/pkgs/ignore"
+	"github.com/shoenig/ignore"
 )
 
 const (
