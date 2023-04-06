@@ -21,18 +21,18 @@ func TestTool_Process(t *testing.T) {
 		result, err := NewTool(defaultMaxLen).Process(load(t, "basic.hcl"))
 		must.NoError(t, err)
 		must.False(t, result.Diagnostics.Problematic)
-		must.Equal(t, "no diagnostics", result.Diagnostics.Result)
-		must.Empty(t, result.Diagnostics.Body)
-		must.NotEmpty(t, result.Fmt)
+		must.Eq(t, "no diagnostics", result.Diagnostics.Result)
+		must.Eq(t, "", result.Diagnostics.Body)
+		must.NotEq(t, "", result.Fmt)
 	})
 
 	t.Run("complex.hcl", func(t *testing.T) {
 		result, err := NewTool(defaultMaxLen).Process(load(t, "complex.hcl"))
 		must.NoError(t, err)
 		must.False(t, result.Diagnostics.Problematic)
-		must.Equal(t, "no diagnostics", result.Diagnostics.Result)
-		must.Empty(t, result.Diagnostics.Body)
-		must.NotEmpty(t, result.Fmt)
+		must.Eq(t, "no diagnostics", result.Diagnostics.Result)
+		must.Eq(t, "", result.Diagnostics.Body)
+		must.NotEq(t, "", result.Fmt)
 	})
 
 	t.Run("problem.hcl", func(t *testing.T) {
@@ -40,7 +40,7 @@ func TestTool_Process(t *testing.T) {
 		must.NoError(t, err)
 		must.True(t, result.Diagnostics.Problematic)
 		must.True(t, strings.HasPrefix(result.Diagnostics.Result, "<input>:2,18-22: Missing"))
-		must.NotEmpty(t, result.Diagnostics.Body)
-		must.Empty(t, result.Fmt)
+		must.NotEq(t, "", result.Diagnostics.Body)
+		must.Eq(t, "", result.Fmt)
 	})
 }
