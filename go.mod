@@ -5,7 +5,6 @@ go 1.20
 require (
 	github.com/gorilla/mux v1.7.4
 	github.com/hashicorp/hcl/v2 v2.14.0
-	github.com/pkg/errors v0.9.1
 	github.com/shoenig/ignore v0.4.0
 	github.com/shoenig/loggy v0.3.2
 	github.com/stretchr/testify v1.6.1

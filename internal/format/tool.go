@@ -2,12 +2,12 @@ package format
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 
 	hcl2 "github.com/hashicorp/hcl/v2"
 	"github.com/hashicorp/hcl/v2/hclparse"
 	"github.com/hashicorp/hcl/v2/hclwrite"
-	"github.com/pkg/errors"
 	"github.com/shoenig/ignore"
 )
 
@@ -36,7 +36,7 @@ type Result struct {
 func (t *Tool) Process(r io.ReadCloser) (*Result, error) {
 	input, err := t.read(r)
 	if err != nil {
-		return nil, errors.Wrap(err, "unable to read payload")
+		return nil, fmt.Errorf("unable to read payload: %w", err)
 	}
 
 	diagnostics, err := t.check(input)
@@ -73,7 +73,7 @@ func (t *Tool) check(body []byte) (*Diagnostics, error) {
 	var buf bytes.Buffer
 	w := hcl2.NewDiagnosticTextWriter(&buf, parser.Files(), 120, false)
 	if err := w.WriteDiagnostics(diagnostics); err != nil {
-		return nil, errors.Wrap(err, "unable to write diagnostics")
+		return nil, fmt.Errorf("unable to write diagnostics: %w", err)
 	}
 
 	return &Diagnostics{
