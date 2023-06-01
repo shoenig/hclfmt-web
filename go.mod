@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/gorilla/mux v1.8.0
-	github.com/hashicorp/hcl/v2 v2.16.2
+	github.com/hashicorp/hcl/v2 v2.17.0
 	github.com/shoenig/ignore v0.4.0
 	github.com/shoenig/loggy v0.3.2
 	github.com/shoenig/test v0.6.3
